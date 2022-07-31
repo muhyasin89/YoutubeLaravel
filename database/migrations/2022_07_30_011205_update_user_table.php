@@ -18,7 +18,10 @@ class UpdateUserTable extends Migration
                 $table->string('first_name');
                 $table->string('last_name');
                 $table->string('username');
+                $table->dropColumn(['name']);
             });
+
+           
         }
     }
 
@@ -32,6 +35,7 @@ class UpdateUserTable extends Migration
         if (Schema::hasTable('users')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->dropColumn(['first_name', 'last_name', "username"]);
+                $table->string('name');
             });
         }
     }

@@ -6,11 +6,123 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @OA\Schema(
+ *     title="User",
+ *     description="User model",
+ *     @OA\Xml(
+ *         name="User"
+ *     )
+ * )
+ */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+
+
+    /**
+     * @OA\Property(
+     *     title="ID",
+     *     description="ID",
+     *     format="int64",
+     *     example=1
+     * )
+     *
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @OA\Property(
+     *      title="Name",
+     *      description="Name of the new User",
+     *      example="A nice username"
+     * )
+     *
+     * @var string
+     */
+    public $username;
+
+        /**
+     * @OA\Property(
+     *      title="Email",
+     *      description="Email's id of the new project",
+     *      format="string",
+     *      example=1
+     * )
+     *
+     * @var string
+     */
+    public $email;
+
+     /**
+     * @OA\Property(
+     *     title="first_name",
+     *     description="first Name author's user model",
+     *     example="This is new user last name"
+     * )
+     *
+     * @var string
+     */
+    private $first_name;
+
+    /**
+     * @OA\Property(
+     *      title="Last Name",
+     *      description="Last Name of the new project",
+     *      example="This is new user last name"
+     * )
+     *
+     * @var string
+     */
+    public $last_name;
+
+    /**
+     * @OA\Property(
+     *     title="Created at",
+     *     description="Created at",
+     *     example="2020-01-27 17:50:45",
+     *     format="datetime",
+     *     type="string"
+     * )
+     *
+     * @var \DateTime
+     */
+    private $created_at;
+
+    /**
+     * @OA\Property(
+     *     title="Updated at",
+     *     description="Updated at",
+     *     example="2020-01-27 17:50:45",
+     *     format="datetime",
+     *     type="string"
+     * )
+     *
+     * @var \DateTime
+     */
+    private $updated_at;
+
+    /**
+     * @OA\Property(
+     *     title="Deleted at",
+     *     description="Deleted at",
+     *     example="2020-01-27 17:50:45",
+     *     format="datetime",
+     *     type="string"
+     * )
+     *
+     * @var \DateTime
+     */
+    private $deleted_at;
+
+
+
+
+   
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +130,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'first_name',
