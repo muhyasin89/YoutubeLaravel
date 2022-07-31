@@ -183,14 +183,39 @@
                 }
             }
         },
-        "/Users/{id}": {
+        "/users/": {
             "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Get User information",
+                "summary": "Get list User",
                 "description": "Returns User data",
-                "operationId": "f167d6ecf118c22866657989cc63019e",
+                "operationId": "39d68ac51c41a767df58736a728f07eb",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "summary": "Get detail User",
+                "description": "Returns User data",
+                "operationId": "910a0c7cf580e1c605648d82a4e57f46",
                 "parameters": [
                     {
                         "name": "id",
@@ -213,6 +238,16 @@
                             }
                         }
                     },
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
                     "400": {
                         "description": "Bad Request"
                     },
@@ -223,14 +258,13 @@
                         "description": "Forbidden"
                     }
                 }
-            },
+            }
+        },
+        "/Users/{id}": {
             "put": {
-                "tags": [
-                    "Users"
-                ],
                 "summary": "Update existing User",
                 "description": "Returns updated User data",
-                "operationId": "updateUser",
+                "operationId": "2653d8527eb74964bb05ca4df3f8c19a",
                 "parameters": [
                     {
                         "name": "id",
@@ -242,17 +276,17 @@
                         }
                     }
                 ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UserRequest"
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
                             }
                         }
-                    }
-                },
-                "responses": {
+                    },
                     "202": {
                         "description": "Successful operation",
                         "content": {
@@ -278,12 +312,9 @@
                 }
             },
             "delete": {
-                "tags": [
-                    "Users"
-                ],
                 "summary": "Delete existing User",
                 "description": "Deletes a record and returns no content",
-                "operationId": "deleteUser",
+                "operationId": "41767803dbc812b968e1014d2f6b5f76",
                 "parameters": [
                     {
                         "name": "id",
@@ -296,6 +327,14 @@
                     }
                 ],
                 "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
                     "204": {
                         "description": "Successful operation",
                         "content": {

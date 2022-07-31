@@ -6,34 +6,56 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 
+use App\Http\Response\GeneralResponse;
+
+use Symfony\Component\HttpFoundation\Response;
+
 class UserController extends Controller
 {
-    /* @OA\Get(
-        *      path="/user",
-        *      operationId="getUserList",
-        *      tags={"User"},
-        *      summary="Get list of User",
-        *      description="Returns list of User",
-        *      @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent(ref="#/components/schemas/UserResource")
-        *       ),
-        *      @OA\Response(
-        *          response=401,
-        *          description="Unauthenticated",
-        *      ),
-        *      @OA\Response(
-        *          response=403,
-        *          description="Forbidden"
-        *      )
-        *     )
-        */
+
+      /**
+     * Create a new UserController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+        
+    }
+
+     /**
+     * @OA\Get(
+     *      path="/users/",
+      *      summary="Get list User",
+     *      description="Returns User data",
+    
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/User")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function index()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new UserResource(User::all());
+        return (new GeneralResponse)->default_json(
+            $success=false,
+            $data= new UserResource(User::all()),
+            $code= Response::HTTP_ACCEPTED
+        );
     }
 
     /**
@@ -54,18 +76,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->all());
-
-        return (new UserResource($user))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        $request_input = $request->all();
+        if(User::where("email", $request_input['email'])->count()){
+            return (new GeneralResponse)->default_json(
+                $success=false,
+                $message= "Email is exist",
+                $data=[],
+                $code=500
+            );
+        }
+        $user = User::create($request_input);
+        return (new GeneralResponse)->default_json(
+            $success=true,
+            $message= "",
+            $data= new UserResource($user),
+            $code= Response::HTTP_ACCEPTED
+        );
     }
 
     /**
      * @OA\Get(
-     *      path="/Users/{id}",
-     *      tags={"Users"},
-     *      summary="Get User information",
+     *      path="/users/{id}",
+      *      summary="Get detail User",
      *      description="Returns User data",
      *      @OA\Parameter(
      *          name="id",
@@ -78,6 +110,11 @@ class UserController extends Controller
      *      ),
      *      @OA\Response(
      *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/User")
+     *       ),
+     *  *      @OA\Response(
+     *          response=202,
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/User")
      *       ),
@@ -97,9 +134,12 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new UserResource(User::find($id));
+        return (new GeneralResponse)->default_json(
+            $success=true,
+            $message= "",
+            $data= new UserResource(User::find($id)),
+            $code= Response::HTTP_ACCEPTED
+        );
     }
 
     /**
@@ -116,8 +156,6 @@ class UserController extends Controller
      /**
      * @OA\Put(
      *      path="/Users/{id}",
-     *      operationId="updateUser",
-     *      tags={"Users"},
      *      summary="Update existing User",
      *      description="Returns updated User data",
      *      @OA\Parameter(
@@ -129,9 +167,10 @@ class UserController extends Controller
      *              type="integer"
      *          )
      *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/User")
      *      ),
      *      @OA\Response(
      *          response=202,
@@ -160,17 +199,19 @@ class UserController extends Controller
     {
         $user->update($request->all());
 
-        return (new UserResource($user))
-            ->response()
-            ->setStatusCode(Response::HTTP_ACCEPTED);
+        return (new GeneralResponse)->default_json(
+            $success=true,
+            $message= "",
+            $data= new UserResource($user),
+            $code= Response::HTTP_ACCEPTED
+        );
     }
 
   
     /**
      * @OA\Delete(
      *      path="/Users/{id}",
-     *      operationId="deleteUser",
-     *      tags={"Users"},
+
      *      summary="Delete existing User",
      *      description="Deletes a record and returns no content",
      *      @OA\Parameter(
@@ -183,9 +224,14 @@ class UserController extends Controller
      *          )
      *      ),
      *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent({})
+     *       ),
+     *      @OA\Response(
      *          response=204,
      *          description="Successful operation",
-     *          @OA\JsonContent()
+     *          @OA\JsonContent({})
      *       ),
      *      @OA\Response(
      *          response=401,
@@ -203,10 +249,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $user->delete();
-
-        return response(null, Response::HTTP_NO_CONTENT);
+        return (new GeneralResponse)->default_json(
+            $success=true,
+            $message= "",
+            $data=[],
+            $code= Response::HTTP_NO_CONTENT
+        );
     }
 }

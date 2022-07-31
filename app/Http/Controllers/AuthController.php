@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\UserController;
+
+use App\Http\Response\GeneralResponse;
 
 class AuthController extends Controller
 {
@@ -16,7 +19,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -50,10 +53,12 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
+    
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        
 
         return $this->respondWithToken($token);
     }
@@ -170,9 +175,14 @@ class AuthController extends Controller
     */
     public function register(Request $request)
     {
-        if($request->has('password') && $request->has('password2')){
-            if ($request['password'] != $request['password2']){
-                return json_encode(array("success" => false, "message" => "password and confirm password must be same"));
+        $request_input = $request->input();
+        if(array_key_exists('password',  $request_input) && array_key_exists('password2',  $request_input)){
+            if ($request_input['password'] != $request_input['password2']){
+                return GeneralResponse::default_json([
+                    "success" => false, 
+                    "message" => "password and confirm password must be same",
+                    "code" => 500
+                ]);
             }
         }
         
@@ -191,7 +201,7 @@ class AuthController extends Controller
     {
         return response()->json([
             'access' => $token,
-            'refresh' => $this->respondWithToken(auth()->refresh()),
+            'refresh' => auth()->refresh(),
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
