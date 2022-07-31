@@ -213,12 +213,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
         $user->update($request->all());
 
         return (new GeneralResponse)->default_json(
             $success=true,
             $message= "",
-            $data= response()->json(User::find($id))->original,
+            $data= response()->json($user)->original,
             $code= Response::HTTP_ACCEPTED
         );
     }

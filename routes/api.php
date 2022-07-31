@@ -29,7 +29,7 @@ Route::group([
     Route::get('users', 'UserController@index');
     Route::get('users/{id}', 'UserController@users');
     Route::post('users/create', 'UserController@store');
-    Route::put('users', 'UserController@update');
+    Route::put('users/{id}', 'UserController@update');
     Route::delete('users', 'UserController@delete');
 });
 
