@@ -51,7 +51,7 @@ class User extends Authenticatable
      *      title="Email",
      *      description="Email's id of the new project",
      *      format="string",
-     *      example=1
+     *      example="user@gmail.com"
      * )
      *
      * @var string
@@ -62,7 +62,7 @@ class User extends Authenticatable
      * @OA\Property(
      *     title="first_name",
      *     description="first Name author's user model",
-     *     example="This is new user last name"
+     *     example="This is new user first name"
      * )
      *
      * @var string

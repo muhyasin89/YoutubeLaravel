@@ -64,7 +64,6 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *      path="/Users/{id}",
-     *      operationId="getUserById",
      *      tags={"Users"},
      *      summary="Get User information",
      *      description="Returns User data",

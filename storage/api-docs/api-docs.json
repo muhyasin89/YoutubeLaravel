@@ -8,6 +8,26 @@
         "/login": {
             "post": {
                 "operationId": "2dd578ff7aba2721293dac66833b27d1",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email Field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Display a credential User."
@@ -71,6 +91,98 @@
                 }
             }
         },
+        "/register": {
+            "post": {
+                "operationId": "0903f2e0df1a8857bee538fc055417f0",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email Field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Username Field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "firstname",
+                        "in": "query",
+                        "description": "First Name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "lastname",
+                        "in": "query",
+                        "description": "Last Name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password2",
+                        "in": "query",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create User credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/Users/{id}": {
             "get": {
                 "tags": [
@@ -78,7 +190,7 @@
                 ],
                 "summary": "Get User information",
                 "description": "Returns User data",
-                "operationId": "getUserById",
+                "operationId": "f167d6ecf118c22866657989cc63019e",
                 "parameters": [
                     {
                         "name": "id",
@@ -240,13 +352,13 @@
                         "description": "Email's id of the new project",
                         "type": "string",
                         "format": "string",
-                        "example": 1
+                        "example": "user@gmail.com"
                     },
                     "first_name": {
                         "title": "first_name",
                         "description": "first Name author's user model",
                         "type": "string",
-                        "example": "This is new user last name"
+                        "example": "This is new user first name"
                     },
                     "last_name": {
                         "title": "Last Name",

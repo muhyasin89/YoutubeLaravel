@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-
+use App\Http\Controllers\UserController;
 
 class AuthController extends Controller
 {
@@ -22,6 +22,24 @@ class AuthController extends Controller
     /**
     * @OA\Post(
     *     path="/login",
+    *     @OA\Parameter(
+     *          name="email",
+     *          description="Email Field",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="password",
+     *          description="Password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
     *     @OA\Response(response="200", description="Display a credential User."),
     *     @OA\Response(response="201", description="Successful operation"),
     *     @OA\Response(response="400", description="Bad Request"),
@@ -67,7 +85,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-  /**
+    /**
     * @OA\Post(
     *     path="/refresh",
     *     @OA\Response(response="200", description="Display a credential User."),
@@ -80,6 +98,86 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
+    }
+
+
+      /**
+    * @OA\Post(
+    *     path="/register",
+    *     @OA\Parameter(
+     *          name="email",
+     *          description="Email Field",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *      @OA\Parameter(
+     *          name="username",
+     *          description="Username Field",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *      @OA\Parameter(
+     *          name="firstname",
+     *          description="First Name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *      @OA\Parameter(
+     *          name="lastname",
+     *          description="Last Name",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="password",
+     *          description="Password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+     *  @OA\Parameter(
+     *          name="password2",
+     *          description="Password",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *     ),
+
+     *    @OA\Response(response="200", description="Create User credentials",
+     *     @OA\JsonContent(ref="#/components/schemas/User")),
+    *     @OA\Response(response="201", description="Successful operation",@OA\JsonContent(ref="#/components/schemas/User")),
+    *     @OA\Response(response="400", description="Bad Request"),
+    *     @OA\Response(response="401", description="Unauthenticated"),
+    *     @OA\Response(response="403", description="Forbidden")
+  
+    * )
+    */
+    public function register(Request $request)
+    {
+        if($request->has('password') && $request->has('password2')){
+            if ($request['password'] != $request['password2']){
+                return json_encode(array("success" => false, "message" => "password and confirm password must be same"));
+            }
+        }
+        
+        $userController = new UserController;
+        return $userController->store($request);
     }
 
     /**
