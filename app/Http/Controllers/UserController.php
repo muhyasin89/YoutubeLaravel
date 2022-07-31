@@ -20,13 +20,13 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('jwt.auth');
         
     }
 
      /**
      * @OA\Get(
-     *      path="/users/",
+     *      path="/users",
       *      summary="Get list User",
      *      description="Returns User data",
     
@@ -53,26 +53,42 @@ class UserController extends Controller
     {
         return (new GeneralResponse)->default_json(
             $success=false,
-            $data= new UserResource(User::all()),
+            $message = "Success",
+            $data= response()->json(User::all())->original,
             $code= Response::HTTP_ACCEPTED
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+  
+     /**
+     * @OA\Post(
+     *      path="/users",
+      *      summary="Create User",
+     *      description="Returns User data",
+    
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/User")
+     *       ),
+     *  *      @OA\Response(
+     *          response=202,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/User")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
      */
     public function store(Request $request)
     {
@@ -137,7 +153,7 @@ class UserController extends Controller
         return (new GeneralResponse)->default_json(
             $success=true,
             $message= "",
-            $data= new UserResource(User::find($id)),
+            $data= response()->json(User::find($id))->original,
             $code= Response::HTTP_ACCEPTED
         );
     }
@@ -202,7 +218,7 @@ class UserController extends Controller
         return (new GeneralResponse)->default_json(
             $success=true,
             $message= "",
-            $data= new UserResource($user),
+            $data= response()->json(User::find($id))->original,
             $code= Response::HTTP_ACCEPTED
         );
     }

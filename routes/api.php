@@ -26,6 +26,10 @@ Route::group([
     Route::post('register', [ 'as' => 'register', 'uses' => 'AuthController@register']);
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh'); 
-    Route::resource('users', 'UsersController');
+    Route::get('users', 'UserController@index');
+    Route::get('users/{id}', 'UserController@users');
+    Route::post('users/create', 'UserController@store');
+    Route::put('users', 'UserController@update');
+    Route::delete('users', 'UserController@delete');
 });
 

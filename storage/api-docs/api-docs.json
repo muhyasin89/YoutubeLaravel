@@ -183,13 +183,49 @@
                 }
             }
         },
-        "/users/": {
+        "/users": {
             "get": {
                 "summary": "Get list User",
                 "description": "Returns User data",
-                "operationId": "39d68ac51c41a767df58736a728f07eb",
+                "operationId": "7e2f5799553ec93c9c43e2a58490d447",
                 "responses": {
                     "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create User",
+                "description": "Returns User data",
+                "operationId": "a1fce870c566eb5fc0cf3178ec5d2fed",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "202": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
@@ -358,17 +394,6 @@
     },
     "components": {
         "schemas": {
-            "UserRequest": {
-                "title": "User request",
-                "description": "User request body data",
-                "required": [
-                    "username",
-                    "email",
-                    "first_name",
-                    "last_name"
-                ],
-                "type": "object"
-            },
             "User": {
                 "title": "User",
                 "description": "User model",
