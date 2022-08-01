@@ -69,3 +69,6 @@ https://jwt-auth.readthedocs.io/en/develop/auth-guard/
 https://blog.quickadminpanel.com/laravel-api-documentation-with-openapiswagger/
 
 https://djiwandou.medium.com/cara-setup-openapi-swagger-di-laravel-c2e59c86b010
+
+http status:
+https://pkp.sfu.ca/ojs/doxygen/master/html/classSymfony_1_1Component_1_1HttpFoundation_1_1Response.html
