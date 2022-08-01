@@ -98,7 +98,7 @@ class UserController extends Controller
                 $success=false,
                 $message= "Email is exist",
                 $data=[],
-                $code=500
+                $code=Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
         $user = User::create($request_input);
@@ -266,7 +266,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-
+        $user = User::find($id);
         $user->delete();
         return (new GeneralResponse)->default_json(
             $success=true,
